@@ -5,7 +5,7 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import client from '../apollo-client';
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { data } = await client.query({
     query: gql`
       query GetArticles {

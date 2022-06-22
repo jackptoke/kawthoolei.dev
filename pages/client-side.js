@@ -1,48 +1,11 @@
 /** @format */
-import { gql } from '@apollo/client';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import client from '../apollo-client';
+import ClientOnly from '../components/ClientOnly';
+import Articles from '../components/Articles';
 
-export async function getStaticProps() {
-  const { data } = await client.query({
-    query: gql`
-      query GetArticles {
-        articles {
-          articleId
-          title
-          content
-          author {
-            username
-          }
-          comments {
-            commentId
-            message
-            member {
-              username
-            }
-            childrenComments {
-              commentId
-              message
-              member {
-                username
-              }
-            }
-          }
-        }
-      }
-    `,
-  });
-
-  return {
-    props: {
-      articles: data.articles.slice(0, 2),
-    },
-  };
-}
-
-export default function Home({ articles }) {
+export default function ClienSide() {
   return (
     <div className={styles.container}>
       <Head>
@@ -55,13 +18,9 @@ export default function Home({ articles }) {
         <h1 className={styles.title}>
           Welcome to <a href='https://nextjs.org'>Next.js!</a>
         </h1>
-        <div className='styles.grid'>
-          {articles.map((article) => (
-            <div key={article.articleId}>
-              <h3>{article.title}</h3>
-            </div>
-          ))}
-        </div>
+        <ClientOnly>
+          <Articles />
+        </ClientOnly>
       </main>
 
       <footer className={styles.footer}>
